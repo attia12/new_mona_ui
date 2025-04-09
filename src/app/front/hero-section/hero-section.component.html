@@ -16,28 +16,34 @@
               <!-- Duration -->
               <div class="col-sm-6 col-lg-3">
                 <label class="form-label">Select genre</label>
-                <select class="form-select js-choice choice-select-text-none" data-position="bottom" data-search-enabled="false">
-                  <option value="category">Category</option>
-                  <option value="comedy">Comedy</option>
-                  <option value="dance">Dance</option>
-                  <option value="family">Family</option>
-                  <option value="music">Music</option>
-                  <option value="workshop">Workshop</option>
+                <select
+                  class="form-select js-choice choice-select-text-none"
+                  data-position="bottom"
+                  data-search-enabled="false"
+                  name="category"
+                  [(ngModel)]="selectedGenre"
+                  (change)="emitFilters()" >
+
+                  <option value="">All Categories</option> <!-- Optional default -->
+                  <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
                 </select>
+
               </div>
               <!-- Date -->
               <div class="col-sm-6 col-lg-3">
-                <label class="form-label">Date form</label>
-                <input type="text" class="form-control flatpickr" value="12/10/2022">
+                <label class="form-label">Date from</label>
+                <input type="text" class="form-control flatpickr" [(ngModel)]="startDate"  (change)="emitFilters()"  name="startDate">
               </div>
-              <!-- Time -->
+
+              <!-- End Date -->
               <div class="col-sm-6 col-lg-3">
                 <label class="form-label">Date to</label>
-                <input type="text" class="form-control flatpickr" value="14/10/2022">
+                <input type="text" class="form-control flatpickr" [(ngModel)]="endDate"  (change)="emitFilters()"  name="endDate">
               </div>
-              <!-- Time -->
+
+              <!-- Filter Button (optional, if you want manual filtering) -->
               <div class="col-sm-6 col-lg-3">
-                <a class="btn btn-primary w-100" href="#">Filters Dates</a>
+                <button class="btn btn-primary w-100" type="button" (click)="emitFilters()">Filter Dates</button>
               </div>
             </form>
             <!-- Form END -->

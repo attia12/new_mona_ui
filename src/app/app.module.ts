@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -6,10 +7,15 @@ import { AppComponent } from './app.component';
 import {FrontModule} from "./front/front.module";
 import {ToastrModule} from "ngx-toastr";
 import {HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {BackModule} from "./back/back.module";
 
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+
+import {NgxStarRatingModule} from "ngx-star-rating";
+import {LottieModule} from "ngx-lottie";
+import player from "lottie-web";
+export function playerFactory() {
+  return player;
+}
 @NgModule({
   declarations: [
     AppComponent
@@ -28,7 +34,10 @@ import {BackModule} from "./back/back.module";
       timeOut: 3000
 
     }),
-    HttpClientModule
+    HttpClientModule,
+    NgxStarRatingModule,
+    LottieModule.forRoot({ player: playerFactory })
+
 
 
   ],

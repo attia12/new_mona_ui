@@ -123,6 +123,17 @@
 
             </div>
           </div>
+          <div class="mb-3" [formGroup]="form">
+
+            <ngx-star-rating
+              [formControl]="form.controls['rating']"
+              [id]="'rating'"
+              (change)="onRatingChange($event)">
+            </ngx-star-rating>
+
+
+
+          </div>
 
           <!-- Statistics START -->
           <div class="card card-body p-4 mt-5">
@@ -133,7 +144,7 @@
                   <i class="bi bi-people fs-4"></i>
                   <div class="ms-3">
                     <h5 class="mb-0">{{event?.maxParticipants}}</h5>
-                    <p class="mb-0">Visitors</p>
+                    <p class="mb-0">Participants</p>
                   </div>
                 </div>
               </div>
@@ -175,7 +186,8 @@
 <!--          <div class="mb-3">-->
 <!--            <label class="form-label">Rating (1-5)</label>-->
 <!--            <input type="number" class="form-control" [(ngModel)]="feedback.rating" name="rating" min="1" max="5">-->
-<!--          </div>-->
+<!--          </div>--><
+
 
           <!-- Comment -->
           <div class="mb-3">

@@ -20,7 +20,6 @@ import { ContactUsComponent } from './components/contact-us/contact-us.component
 import { MainComponent } from './components/main/main.component';
 import { FooterComponent } from './components/footer/footer.component';
 import {NgxStarRatingModule} from "ngx-star-rating";
-import {LottieComponent} from "ngx-lottie";
 
 
 @NgModule({
@@ -47,8 +46,7 @@ import {LottieComponent} from "ngx-lottie";
     FrontRoutingModule,
     FormsModule,
     NgxStarRatingModule,
-    ReactiveFormsModule,
-    LottieComponent
+    ReactiveFormsModule
   ]
 })
 export class FrontModule { }

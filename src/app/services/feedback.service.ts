@@ -24,4 +24,12 @@ export class FeedbackService {
   deleteFeedback(feedbackId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${feedbackId}`);
   }
+
+  getUnreadNotifications(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${userId}/unread`);
+  }
+
+  markNotificationAsRead(notificationId:number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${notificationId}/mark-as-read`,{} );
+  }
 }

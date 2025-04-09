@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationService} from "../../../services/notification.service";
-import {FeedbackService} from "../../../services/feedback.service";
 
 @Component({
   selector: 'app-header',
@@ -13,7 +12,6 @@ export class HeaderComponent implements OnInit{
   userId: number = 1;
   constructor(
     private notificationService: NotificationService,
-    private feedbackService:FeedbackService
 
   ) {}
 
@@ -33,10 +31,6 @@ export class HeaderComponent implements OnInit{
 
 
   markAsRead(notificationId:number) {
-
-
-    this.feedbackService.markNotificationAsRead(notificationId).subscribe(() => {
-      this.notificationService.markAsRead(notificationId);
-    });
+    this.notificationService.markAsRead(notificationId);
   }
 }

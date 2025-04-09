@@ -21,7 +21,8 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -34,7 +35,10 @@
               "src/styles.scss",
               "src/assets/front/css/templatemo-scholar.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/front/js/custom.js",
+              "src/assets/front/js/owl-carousel.js"
+            ]
           },
           "configurations": {
             "production": {

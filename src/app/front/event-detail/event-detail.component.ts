@@ -1,8 +1,10 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {ParicipationService} from "../../services/paricipation.service";
 import {FeedbackService} from "../../services/feedback.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {EventRatingService} from "../../services/event-rating.service";
 
 @Component({
   selector: 'app-event-detail',
@@ -11,26 +13,36 @@ import {FeedbackService} from "../../services/feedback.service";
     '../../../assets/vendor/flatpickr/dist/flatpickr.css','../../../assets/vendor/choices.js/public/assets/styles/choices.min.css'],
   encapsulation:ViewEncapsulation.None
 })
-export class EventDetailComponent implements OnInit{
+export class EventDetailComponent implements OnInit {
   event: any;
   userId=1;
   isParticipating: boolean = false;
   feedbacks:any[]=[];
   feedback:any={};
+  public form: FormGroup;
+  averageRating: number = 0;
 
-  constructor(private feedbackService:FeedbackService,private route: ActivatedRoute,private toastr:ToastrService,private participationService: ParicipationService) {
+
+  constructor( private eventRatingService: EventRatingService,private feedbackService:FeedbackService,private route: ActivatedRoute,private toastr:ToastrService,private participationService: ParicipationService,private fb: FormBuilder) {
 
     const navigation = window.history.state;
     this.event = navigation.eventData ? navigation.eventData : null;
+
+
+    this.form = this.fb.group({
+      rating: [0, Validators.required],
+    })
   }
 
   ngOnInit(): void {
-        console.log(this.event);
+    this.loadAverageRating();
+
     this.participationService.participation$.subscribe(status => {
       this.isParticipating = status;
     });
         this.checkUserParticipation(this.event.id)
     this.loadFeedbackForAnEvent();
+
     }
 
   participateInEvent() {
@@ -102,6 +114,49 @@ export class EventDetailComponent implements OnInit{
       },
       error: (error) => {
         this.toastr.error("Failed to submit feedback.", "Error");
+      }
+    });
+  }
+
+
+  private loadAverageRating() {
+    this.eventRatingService.getAverageRating(this.event.id).subscribe({
+      next: (response) => {
+
+        this.averageRating = response
+        console.log("Average rating loaded:", response);
+        this.form.patchValue({ rating:this.averageRating });
+
+        console.log("Rating form value after patch:", this.form.value.rating);
+
+      },
+      error: (error) => {
+        console.error("Error loading average rating:", error);
+      }
+    });
+  }
+  onRatingChange(selectedRating: number) {
+
+    this.form.patchValue({ rating: selectedRating });  // Update the form control
+    this.submitRating(selectedRating);  // Submit the rating after the change
+  }
+
+  submitRating(selectedRating:number) {
+
+    if (selectedRating <= 0 || selectedRating > 5) {
+      this.toastr.warning("Please select a valid rating between 1 and 5.", "Validation Error");
+      return;
+    }
+
+    this.eventRatingService.addRating(this.event.id, selectedRating, this.userId).subscribe({
+      next: (response) => {
+        this.toastr.success("Rating submitted successfully!", "Success");
+        // After submitting, reload the average rating
+        this.loadAverageRating();
+      },
+      error: (error) => {
+        this.toastr.error("Failed to submit rating.", "Error");
+        console.error("Error submitting rating:", error);
       }
     });
   }
