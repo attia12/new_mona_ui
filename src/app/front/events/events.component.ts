@@ -1,7 +1,10 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {EventService} from "../../services/event.service";
 import {AnimationOptions} from "ngx-lottie";
-
+const toDateOnly = (dateString: string | Date): string => {
+  const d = new Date(dateString);
+  return d.toISOString().split('T')[0]; // returns '2025-04-17'
+};
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
@@ -47,29 +50,31 @@ export class EventsComponent implements OnInit{
     const { genre, startDate, endDate } = filters;
 
     this.filteredEvents = this.events.filter(event => {
-      // Debug logs
-      console.log("Event category:", event.category);
-      console.log("Event startDate:", event.startDate);
-      console.log("Event endDate:", event.date);
-
-      // Match genre
       const matchGenre = genre ? event.category?.toLowerCase() === genre.toLowerCase() : true;
 
-      // Convert dates
-      const eventStartDate = new Date(event.startDate);
-      const eventEndDate = new Date(event.date);
-      const filterStartDate = startDate ? new Date(startDate) : null;
-      const filterEndDate = endDate ? new Date(endDate) : null;
+      const eventStartDate = toDateOnly(event.startDate);
+      const eventEndDate = toDateOnly(event.date);
 
-      // Match dates
-      const matchStart = filterStartDate ? eventStartDate >= filterStartDate : true;
-      const matchEnd = filterEndDate ? eventEndDate <= filterEndDate : true;
+      let matchStart = true;
+      let matchEnd = true;
+
+      if (startDate) {
+        const filterStartDate = toDateOnly(startDate);
+        matchStart = eventStartDate >= filterStartDate;
+      }
+
+      if (endDate) {
+        const filterEndDate = toDateOnly(endDate);
+        matchEnd = eventEndDate <= filterEndDate;
+      }
 
       return matchGenre && matchStart && matchEnd;
     });
 
     console.log('Filtered events:', this.filteredEvents);
   }
+
+
 
   resetFilters() {
     this.filteredEvents = [...this.events];
